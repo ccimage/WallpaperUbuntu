@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GtkSharp" Version="3.24.24.95" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WallpaperUbuntu.Application\WallpaperUbuntu.Application.csproj" />
+    <ProjectReference Include="..\WallpaperUbuntu.Infrastructure\WallpaperUbuntu.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
