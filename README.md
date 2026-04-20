@@ -1,4 +1,5 @@
 # WallpaperUbuntu
+> Vibe Coding is happy coding.
 
 一个为 Ubuntu GNOME 桌面环境设计的轻量级壁纸管理工具。
 
