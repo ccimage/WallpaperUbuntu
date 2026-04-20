@@ -6,12 +6,15 @@ using WallpaperUbuntu.Domain.Interfaces;
 using WallpaperUbuntu.Infrastructure.Configuration;
 using WallpaperUbuntu.Infrastructure.Desktop;
 using WallpaperUbuntu.Infrastructure.FileSystem;
+using WallpaperUbuntu.UI.Tray;
 using WallpaperUbuntu.UI.Windows;
 
 namespace WallpaperUbuntu.App;
 
 class Program
 {
+    private static AppTrayIcon? _trayIcon;
+    
     [STAThread]
     static void Main(string[] args)
     {
@@ -28,8 +31,15 @@ class Program
         var appService = serviceProvider.GetRequiredService<WallpaperAppService>();
         var mainWindow = new MainWindow(appService);
         
+        // 创建托盘图标
+        _trayIcon = new AppTrayIcon(appService);
+        _trayIcon.SetMainWindow(mainWindow);
+        
         // 初始化应用服务
         appService.InitializeAsync().Wait();
+        
+        // 显示托盘图标
+        _trayIcon.Show();
         
         // 显示窗口
         mainWindow.ShowAll();

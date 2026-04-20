@@ -28,6 +28,11 @@ public class MainWindow : Window
     private Label _statusLabel;
     private Label _wallpaperNameLabel;
     private Label _wallpaperPathLabel;
+    
+    /// <summary>
+    /// 是否最小化到托盘
+    /// </summary>
+    public bool MinimizeToTray { get; set; } = true;
 
     public MainWindow(WallpaperAppService appService) : base("WallpaperUbuntu")
     {
@@ -82,6 +87,7 @@ public class MainWindow : Window
         LoadData();
         
         DeleteEvent += OnDeleteEvent;
+        WindowStateEvent += OnWindowStateEvent;
     }
 
     /// <summary>
@@ -394,7 +400,32 @@ public class MainWindow : Window
 
     private void OnDeleteEvent(object sender, DeleteEventArgs a)
     {
-        _appService.StateChanged -= OnStateChanged;
-        Gtk.Application.Quit();
+        if (MinimizeToTray)
+        {
+            // 最小化到托盘而不是退出
+            a.RetVal = true;
+            Hide();
+        }
+        else
+        {
+            _appService.StateChanged -= OnStateChanged;
+            Gtk.Application.Quit();
+        }
+    }
+    
+    /// <summary>
+    /// 窗口状态事件处理
+    /// </summary>
+    private void OnWindowStateEvent(object o, WindowStateEventArgs args)
+    {
+        // 当窗口被最小化时，隐藏到托盘
+        if ((args.Event.ChangedMask & Gdk.WindowState.Iconified) != 0 &&
+            (args.Event.NewWindowState & Gdk.WindowState.Iconified) != 0)
+        {
+            if (MinimizeToTray)
+            {
+                Hide();
+            }
+        }
     }
 }
