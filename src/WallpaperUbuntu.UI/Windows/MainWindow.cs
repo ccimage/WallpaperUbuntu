@@ -13,21 +13,21 @@ public class MainWindow : Window
     private readonly WallpaperAppService _appService;
     
     // 控件
-    private readonly ListBox _folderListBox;
-    private readonly Button _addFolderButton;
-    private readonly Button _removeFolderButton;
-    private readonly CheckButton _recursiveCheckButton;
-    private readonly ComboBoxText _modeComboBox;
-    private readonly SpinButton _intervalSpinButton;
-    private readonly CheckButton _autoStartCheckButton;
-    private readonly CheckButton _autoSwitchCheckButton;
-    private readonly Button _nextButton;
-    private readonly Button _previousButton;
-    private readonly Button _pauseButton;
-    private readonly Button _resumeButton;
-    private readonly Label _statusLabel;
-    private readonly Label _wallpaperNameLabel;
-    private readonly Label _wallpaperPathLabel;
+    private ListBox _folderListBox;
+    private Button _addFolderButton;
+    private Button _removeFolderButton;
+    private CheckButton _recursiveCheckButton;
+    private ComboBoxText _modeComboBox;
+    private SpinButton _intervalSpinButton;
+    private CheckButton _autoStartCheckButton;
+    private CheckButton _autoSwitchCheckButton;
+    private Button _nextButton;
+    private Button _previousButton;
+    private Button _pauseButton;
+    private Button _resumeButton;
+    private Label _statusLabel;
+    private Label _wallpaperNameLabel;
+    private Label _wallpaperPathLabel;
 
     public MainWindow(WallpaperAppService appService) : base("WallpaperUbuntu")
     {
@@ -395,6 +395,6 @@ public class MainWindow : Window
     private void OnDeleteEvent(object sender, DeleteEventArgs a)
     {
         _appService.StateChanged -= OnStateChanged;
-        Application.Quit();
+        Gtk.Application.Quit();
     }
 }

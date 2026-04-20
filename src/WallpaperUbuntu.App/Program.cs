@@ -22,7 +22,7 @@ class Program
         var serviceProvider = services.BuildServiceProvider();
         
         // 初始化GTK
-        Application.Init();
+        Gtk.Application.Init();
         
         // 创建主窗口
         var appService = serviceProvider.GetRequiredService<WallpaperAppService>();
@@ -35,7 +35,7 @@ class Program
         mainWindow.ShowAll();
         
         // 运行GTK主循环
-        Application.Run();
+        Gtk.Application.Run();
     }
     
     private static void ConfigureServices(IServiceCollection services)

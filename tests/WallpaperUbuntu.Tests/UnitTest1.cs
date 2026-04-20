@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace WallpaperUbuntu.Tests;
 
 public class UnitTest1
