@@ -32,6 +32,10 @@ dotnet build
 
 # 发布
 dotnet publish -c Release -r linux-x64 --self-contained false
+
+
+# 单个可执行文件
+dotnet publish src/WallpaperUbuntu.App/WallpaperUbuntu.App.csproj -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish
 ```
 
 ## 运行
