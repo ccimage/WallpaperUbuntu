@@ -32,11 +32,11 @@ public class JsonConfigStore : IConfigStore
             if (!File.Exists(_configPath))
             {
                 var defaultConfig = AppConfig.CreateDefault();
-                await SaveAsync(defaultConfig);
+                await SaveAsync(defaultConfig).ConfigureAwait(false);
                 return defaultConfig;
             }
 
-            var json = await File.ReadAllTextAsync(_configPath);
+            var json = await File.ReadAllTextAsync(_configPath).ConfigureAwait(false);
             var config = JsonSerializer.Deserialize<AppConfig>(json, JsonOptions);
             
             return config ?? AppConfig.CreateDefault();
@@ -51,33 +51,26 @@ public class JsonConfigStore : IConfigStore
     /// <inheritdoc/>
     public async Task SaveAsync(AppConfig config)
     {
-        try
+        // 确保目录存在
+        if (!Directory.Exists(_configDir))
         {
-            // 确保目录存在
-            if (!Directory.Exists(_configDir))
-            {
-                Directory.CreateDirectory(_configDir);
-            }
+            Directory.CreateDirectory(_configDir);
+        }
 
-            // 原子写入：先写入临时文件，再替换
-            var tempPath = _configPath + ".tmp";
-            var json = JsonSerializer.Serialize(config, JsonOptions);
-            
-            await File.WriteAllTextAsync(tempPath, json);
-            
-            // 备份旧配置
-            if (File.Exists(_configPath))
-            {
-                var backupPath = _configPath + ".bak";
-                File.Copy(_configPath, backupPath, true);
-            }
-            
-            // 替换配置文件
-            File.Move(tempPath, _configPath, true);
-        }
-        catch (Exception)
+        // 原子写入：先写入临时文件，再替换
+        var tempPath = _configPath + ".tmp";
+        var json = JsonSerializer.Serialize(config, JsonOptions);
+        
+        await File.WriteAllTextAsync(tempPath, json).ConfigureAwait(false);
+        
+        // 备份旧配置
+        if (File.Exists(_configPath))
         {
-            throw;
+            var backupPath = _configPath + ".bak";
+            File.Copy(_configPath, backupPath, true);
         }
+        
+        // 替换配置文件
+        File.Move(tempPath, _configPath, true);
     }
 }

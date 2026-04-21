@@ -64,13 +64,13 @@ public class WallpaperAppService : IDisposable
         _logger?.LogInformation("正在初始化应用...");
 
         // 加载配置
-        _config = await _configStore.LoadAsync();
+        _config = await _configStore.LoadAsync().ConfigureAwait(false);
         
         // 设置策略
         UpdateStrategy(_config.SwitchMode);
         
         // 扫描壁纸
-        await RefreshCatalogAsync();
+        await RefreshCatalogAsync().ConfigureAwait(false);
         
         // 如果启用自动切换，启动调度器
         if (_config.AutoSwitchEnabled && _state.WallpaperList.Count > 0)
@@ -91,7 +91,7 @@ public class WallpaperAppService : IDisposable
         var items = await _scanner.ScanAsync(
             _config.Folders,
             _config.RecursiveScan,
-            _config.SupportedExtensions);
+            _config.SupportedExtensions).ConfigureAwait(false);
         
         _state.WallpaperList = items;
         _state.History.Clear();
@@ -149,7 +149,7 @@ public class WallpaperAppService : IDisposable
     {
         try
         {
-            await _wallpaperService.SetWallpaperAsync(item.FilePath);
+            await _wallpaperService.SetWallpaperAsync(item.FilePath).ConfigureAwait(false);
             
             // 记录历史
             _state.History.RecordPlay(_state.CurrentWallpaperPath);
@@ -209,7 +209,7 @@ public class WallpaperAppService : IDisposable
     /// </summary>
     public async Task SaveSettingsAsync()
     {
-        await _configStore.SaveAsync(_config);
+        await _configStore.SaveAsync(_config).ConfigureAwait(false);
         
         // 更新调度器间隔
         if (_scheduler.IsRunning)
@@ -223,12 +223,12 @@ public class WallpaperAppService : IDisposable
             var execPath = Environment.ProcessPath;
             if (execPath != null)
             {
-                await _autostartService.EnableAsync(execPath);
+                await _autostartService.EnableAsync(execPath).ConfigureAwait(false);
             }
         }
         else
         {
-            await _autostartService.DisableAsync();
+            await _autostartService.DisableAsync().ConfigureAwait(false);
         }
         
         _logger?.LogInformation("设置已保存");
