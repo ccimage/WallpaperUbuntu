@@ -28,6 +28,7 @@ public class MainWindow : Window
     private Label _statusLabel;
     private Label _wallpaperNameLabel;
     private Label _wallpaperPathLabel;
+    private Label _totalCountLabel;
     
     /// <summary>
     /// 是否最小化到托盘
@@ -211,9 +212,9 @@ public class MainWindow : Window
         var statsBox = new Box(Orientation.Vertical, 5);
         statsBox.Margin = 10;
         
-        var totalLabel = new Label("壁纸总数: 0");
-        totalLabel.Halign = Align.Start;
-        statsBox.PackStart(totalLabel, false, false, 0);
+        _totalCountLabel = new Label("壁纸总数: 0");
+        _totalCountLabel.Halign = Align.Start;
+        statsBox.PackStart(_totalCountLabel, false, false, 0);
         
         statsFrame.Add(statsBox);
         box.PackStart(statsFrame, false, false, 0);
@@ -316,7 +317,8 @@ public class MainWindow : Window
             _wallpaperPathLabel.Text = "";
         }
         
-        _statusLabel.Text = $"壁纸总数: {state.TotalCount} | 自动切换: {(state.IsPaused ? "已暂停" : "运行中")}";
+        _totalCountLabel.Text = $"壁纸总数: {state.TotalCount}";
+        _statusLabel.Text = $"自动切换: {(state.IsPaused ? "已暂停" : "运行中")}";
     }
 
     private void OnStateChanged(object? sender, EventArgs e)
@@ -374,7 +376,7 @@ public class MainWindow : Window
 
     private async void OnModeChanged(object? sender, EventArgs e)
     {
-        var mode = _modeComboBox.ActiveId ?? "Sequential";
+        var mode = _modeComboBox.ActiveText ?? "Sequential";
         _appService.Config.SwitchMode = mode;
         _appService.UpdateStrategy(mode);
         await _appService.SaveSettingsAsync();

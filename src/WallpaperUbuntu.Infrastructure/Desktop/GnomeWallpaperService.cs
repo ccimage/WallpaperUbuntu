@@ -25,7 +25,7 @@ public class GnomeWallpaperService : IWallpaperSystemService
         }
 
         // 转换为URI格式
-        var uri = $"file://{Uri.EscapeDataString(filePath)}";
+        var uri = new Uri(filePath).AbsoluteUri;
         
         _logger?.LogInformation("设置壁纸: {Uri}", uri);
 

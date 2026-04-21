@@ -29,14 +29,15 @@ class Program
         
         // 创建主窗口
         var appService = serviceProvider.GetRequiredService<WallpaperAppService>();
+        
+        // 先初始化应用服务（加载配置）
+        appService.InitializeAsync().Wait();
+        
         var mainWindow = new MainWindow(appService);
         
         // 创建托盘图标
         _trayIcon = new AppTrayIcon(appService);
         _trayIcon.SetMainWindow(mainWindow);
-        
-        // 初始化应用服务
-        appService.InitializeAsync().Wait();
         
         // 显示托盘图标
         _trayIcon.Show();
